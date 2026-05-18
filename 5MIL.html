@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Last Responders — IL Tax Credit</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d0d1a;color:#e0e0f0;font-family:'Segoe UI',system-ui,sans-serif;font-size:13px}
+body.editmode .editable{background:#1a2a1a!important;cursor:pointer;outline:1px dashed #4caf50}
+body.editmode .editable:hover{background:#243a24!important}
+#lock{position:fixed;top:10px;right:14px;font-size:20px;cursor:pointer;z-index:999;user-select:none;color:#666}
+#lock.on{color:#4caf50}
+.banner{background:linear-gradient(135deg,#1a1a3e,#0d2040);border-bottom:1px solid #2a2a5a;padding:10px 18px;display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+.banner h1{font-size:15px;font-weight:700;color:#7ec8ff;white-space:nowrap}
+.kpi{display:flex;flex-direction:column;align-items:center;min-width:100px}
+.kpi-lbl{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.5px}
+.kpi-val{font-size:17px;font-weight:700;color:#4fc3f7}
+.green{color:#81c784!important}.gold{color:#ffd54f!important}.purple{color:#ce93d8!important}.orange{color:#ff8a65!important}
+.tabs{display:flex;background:#111125;border-bottom:1px solid #2a2a5a;overflow-x:auto}
+.tab{padding:9px 16px;cursor:pointer;white-space:nowrap;color:#888;border-bottom:2px solid transparent;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.tab.active{color:#7ec8ff;border-bottom-color:#7ec8ff;background:#1a1a35}
+.tab:hover:not(.active){color:#aaa;background:#15152a}
+.content{display:none;padding:14px 18px;max-width:1120px}
+.content.active{display:block}
+table{width:100%;border-collapse:collapse;margin-bottom:14px}
+th{background:#1a1a35;color:#888;font-size:10px;text-transform:uppercase;letter-spacing:.3px;padding:5px 7px;text-align:left;border-bottom:1px solid #2a2a4a}
+td{padding:4px 7px;border-bottom:1px solid #1a1a2a;vertical-align:middle}
+tr:hover td{background:#131326}
+.shdr{background:#161630;color:#8ab;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:6px 7px;border-bottom:1px solid #2a2a4a}
+.yes{color:#81c784}.no{color:#ef5350}.nr{color:#ce93d8}.partial{color:#ffd54f}
+.R{text-align:right}.B{font-weight:700}
+.tag{font-size:9px;padding:1px 4px;border-radius:3px;font-weight:700;text-transform:uppercase;margin-left:3px}
+.tag.lo{background:#1a3a2a;color:#81c784}.tag.sag{background:#1a2a3a;color:#4fc3f7}
+.tag.NR{background:#2a1a3a;color:#ce93d8}.tag.LA{background:#3a1a1a;color:#ef9a9a}
+.tag.IA{background:#2a2a1a;color:#ffd54f}.tag.LCL{background:#1a2a1a;color:#a5d6a7}
+.tag.MW{background:#1a2a2a;color:#80deea}
+.cl{color:#81c784;font-weight:700}/* credit line */
+.editable{border-radius:2px;padding:1px 4px}
+/* collapsible */
+.chdr{display:flex;align-items:center;justify-content:space-between;background:#1a1a35;border:1px solid #2a2a5a;border-radius:4px;padding:7px 11px;cursor:pointer;margin:8px 0 2px;user-select:none}
+.chdr:hover{background:#1e1e3e}
+.chdr .arr{transition:transform .2s;color:#888;font-size:13px}
+.chdr.open .arr{transform:rotate(180deg)}
+.cbody{border:1px solid #2a2a4a;border-top:none;border-radius:0 0 4px 4px;margin-bottom:8px}
+.cbody.hide{display:none}
+.cht{font-size:11px;font-weight:700;color:#9ab;text-transform:uppercase;letter-spacing:.4px}
+.chv{font-size:13px;font-weight:700;color:#4fc3f7}
+/* toggles */
+.tgl-grid{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px}
+.tgl{display:flex;align-items:center;gap:5px;background:#161630;border:1px solid #2a2a4a;border-radius:4px;padding:4px 9px;font-size:11px;cursor:pointer}
+.tgl:hover{background:#1e1e40}
+.tgl input{cursor:pointer;accent-color:#4fc3f7;width:13px;height:13px}
+/* slider */
+.srow{display:flex;align-items:center;gap:10px;padding:7px 12px;background:#12122a;border-bottom:1px solid #1a1a2e}
+input[type=range]{accent-color:#ce93d8;cursor:pointer}
+/* summary grid */
+.sgrid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;background:#0d1a0d;border:1px solid #2a4a2a;border-radius:6px;padding:14px 18px;margin-top:8px}
+.sbox h4{color:#888;font-size:10px;text-transform:uppercase;margin-bottom:3px}
+.sbox .sv{font-size:17px;font-weight:700}
+.note{color:#777;font-size:11px;font-style:italic;padding:3px 7px}
+.warn{color:#ffd54f;font-size:11px;padding:3px 7px}
+.infobox{background:#161630;border:1px solid #2a2a5a;border-radius:5px;padding:12px 16px;margin-bottom:12px}
+.infobox h3{color:#7ec8ff;font-size:11px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:7px}
+.add-btn{font-size:10px;background:#1a3a1a;border:1px solid #2a5a2a;color:#81c784;padding:2px 9px;border-radius:3px;cursor:pointer;font-weight:700}
+.add-btn:hover{background:#243a24}
+</style>
+</head>
+<body>
+<div id="lock" title="Click to unlock — then click any dollar value to edit it">&#128274;</div>
+
+<div class="banner">
+  <h1>LAST RESPONDERS<br><span style="color:#888;font-size:10px;font-weight:400">IL Film Tax Credit &middot; <span id="banner-budget" class="editable" data-k="budget" style="color:#888">$5,117,417</span> &middot; 05/07/2026</span></h1>
+  <div class="kpi"><span class="kpi-lbl">Credit Base</span><span class="kpi-val" id="b-base">—</span></div>
+  <div class="kpi"><span class="kpi-lbl">30% Base Credit</span><span class="kpi-val green" id="b-credit">—</span></div>
+  <div class="kpi"><span class="kpi-lbl">15% EDA Uplift</span><span class="kpi-val purple" id="b-uplift">—</span></div>
+  <div class="kpi"><span class="kpi-lbl">Total IL Credit</span><span class="kpi-val gold" id="b-total">—</span></div>
+  <div class="kpi"><span class="kpi-lbl">Eff. Rate</span><span class="kpi-val orange" id="b-rate">—</span></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('gt',this)">Grand Total</div>
+  <div class="tab" onclick="switchTab('labor',this)">Labor</div>
+  <div class="tab" onclick="switchTab('spend',this)">Qualified Spend</div>
+  <div class="tab" onclick="switchTab('allow',this)">Allowances</div>
+  <div class="tab" onclick="switchTab('iowa',this)">Iowa Exclusions</div>
+  <div class="tab" onclick="switchTab('caps',this)">Minimums &amp; Caps</div>
+</div>
+
+<!-- ===== GRAND TOTAL ===== -->
+<div id="tab-gt" class="content active">
+
+  <!-- TOGGLES -->
+  <div class="chdr open" onclick="toggleSec(this,'gt-tgl')">
+    <span class="cht">&#9881; Scenario Toggles</span><span class="arr">&#9660;</span>
+  </div>
+  <div class="cbody" id="gt-tgl">
+    <div class="tgl-grid">
+      <label class="tgl"><input type="checkbox" id="gt-ep2" checked onchange="syncTgl('ep2',this.checked)"> 2nd EP — LA Producer ($40K)</label>
+      <label class="tgl"><input type="checkbox" id="gt-ap" checked onchange="syncTgl('ap',this.checked)"> Assoc Producer — IL ($40K)</label>
+      <label class="tgl"><input type="checkbox" id="gt-prodacc" onchange="syncTgl('prodacc',this.checked)"> Prod Accountant as NR Key ($31.5K)</label>
+      <label class="tgl"><input type="checkbox" id="gt-klo" checked onchange="syncTgl('klo',this.checked)"> Kelso — Loan-Out ($7.5K)</label>
+      <label class="tgl"><input type="checkbox" id="gt-ksag" checked onchange="syncTgl('ksag',this.checked)"> Kelso — SAG ($30.6K)</label>
+      <label class="tgl"><input type="checkbox" id="gt-mlo" checked onchange="syncTgl('mlo',this.checked)"> Mitch — Loan-Out ($7.5K)</label>
+      <label class="tgl"><input type="checkbox" id="gt-msag" checked onchange="syncTgl('msag',this.checked)"> Mitch — SAG ($30.6K)</label>
+      <label class="tgl"><input type="checkbox" id="gt-ld" checked onchange="syncTgl('ld',this.checked)"> L&amp;D Allowances ($18.5K)</label>
+      <label class="tgl"><input type="checkbox" id="gt-box" checked onchange="syncTgl('box',this.checked)"> Box Rentals ($36.3K)</label>
+      <label class="tgl"><input type="checkbox" id="gt-car" checked onchange="syncTgl('car',this.checked)"> Car Allowances ($17K)</label>
+      <label class="tgl"><input type="checkbox" id="gt-mk" checked onchange="syncTgl('mk',this.checked)"> Marketing/GE/Misc ($76.1K)</label>
+      <label class="tgl"><input type="checkbox" id="gt-hs" onchange="syncTgl('hs',this.checked)"> High Speed Cam ($21.5K)</label>
+      <label class="tgl"><input type="checkbox" id="gt-acam" onchange="syncTgl('acam',this.checked)"> A-Cam Add-On ($15K)</label>
+    </div>
+    <div class="srow">
+      <span style="color:#ce93d8;font-size:11px">Extras EDA %:</span>
+      <input type="range" min="75" max="100" value="85" id="gt-uslider" oninput="setUplift(+this.value)" style="width:160px">
+      <span style="color:#ce93d8;font-weight:700" id="gt-upct">85%</span>
+    </div>
+  </div>
+
+  <!-- LABOR -->
+  <div class="chdr open" onclick="toggleSec(this,'gt-lab')">
+    <span class="cht">&#128188; Labor</span><span class="chv" id="gt-lab-hdr">—</span><span class="arr">&#9660;</span>
+  </div>
+  <div class="cbody" id="gt-lab">
+    <table>
+      <tr><th>Category</th><th class="R">Eligible Wages</th><th class="R">30% Credit</th></tr>
+      <tr><td>Director — Cole Needham</td><td class="R editable" id="e-director" data-k="director">$40,000</td><td class="R cl" id="c-director">—</td></tr>
+      <tr><td>EP1 — 3rd EP / Exec Producer (loan-out)</td><td class="R editable" id="e-ep1" data-k="ep1">$75,000</td><td class="R cl" id="c-ep1">—</td></tr>
+      <tr><td>2nd EP — LA Producer (acct 1203) <span id="ep2-tag" class="tag NR">NR KEY</span></td><td class="R" id="v-ep2">—</td><td class="R cl" id="c-ep2">—</td></tr>
+      <tr><td>Assoc Producer — IL Producer (acct 1204) <span class="tag LCL">LOCAL</span></td><td class="R" id="v-ap">—</td><td class="R cl" id="c-ap">—</td></tr>
+      <tr><td>Non-Resident Actors (wages only, no agency fee)</td><td class="R" id="v-cast">—</td><td class="R cl" id="c-cast">—</td></tr>
+      <tr><td>Kelso + Mitch (loan-out + SAG portions)</td><td class="R" id="v-km">—</td><td class="R cl" id="c-km">—</td></tr>
+      <tr><td>BTL IL Loan-Out Crew</td><td class="R editable" id="e-btllo" data-k="btl_lo">$910,315</td><td class="R cl" id="c-btllo">—</td></tr>
+      <tr><td>BTL IL Local Hire Crew</td><td class="R editable" id="e-btllocal" data-k="btl_local">$212,674</td><td class="R cl" id="c-btllocal">—</td></tr>
+      <tr style="background:#1a1a35"><td class="B">Total Labor Base</td><td class="R B" id="v-labbase">—</td><td class="R B cl" id="c-labbase">—</td></tr>
+    </table>
+  </div>
+
+  <!-- SPEND -->
+  <div class="chdr open" onclick="toggleSec(this,'gt-sp')">
+    <span class="cht">&#127961; Qualified IL Spend</span><span class="chv" id="gt-sp-hdr">—</span><span class="arr">&#9660;</span>
+  </div>
+  <div class="cbody" id="gt-sp">
+    <table>
+      <tr><th>Item</th><th class="R">Amount</th><th class="R">30% Credit</th></tr>
+      <tr><td>Catering Expenses</td><td class="R editable" id="e-catering" data-k="catering">$77,546</td><td class="R cl" id="c-catering">—</td></tr>
+      <tr><td>Craft Service Purchases</td><td class="R editable" id="e-cspurch" data-k="cspurch">$51,602</td><td class="R cl" id="c-cspurch">—</td></tr>
+      <tr><td>Police &amp; Fire</td><td class="R editable" id="e-polfire" data-k="polfire">$17,038</td><td class="R cl" id="c-polfire">—</td></tr>
+      <tr><td>Production Office Rental</td><td class="R editable" id="e-offrent" data-k="offrent">$9,788</td><td class="R cl" id="c-offrent">—</td></tr>
+      <tr><td>Office Supplies / Copiers</td><td class="R editable" id="e-offsup" data-k="offsup">$6,199</td><td class="R cl" id="c-offsup">—</td></tr>
+      <tr><td>Crew Housing / AirBnBs</td><td class="R editable" id="e-housing" data-k="housing">$23,475</td><td class="R cl" id="c-housing">—</td></tr>
+      <tr><td>IL Crew Per Diems</td><td class="R editable" id="e-perdiems" data-k="perdiems">$13,200</td><td class="R cl" id="c-perdiems">—</td></tr>
+      <tr><td>Location Security</td><td class="R editable" id="e-locsec" data-k="locsec">$8,581</td><td class="R cl" id="c-locsec">—</td></tr>
+      <tr><td>IL Location Site Rentals &amp; Fees</td><td class="R editable" id="e-locfees" data-k="locfees">$91,181</td><td class="R cl" id="c-locfees">—</td></tr>
+      <tr><td>Picture Car Rentals (IL)</td><td class="R editable" id="e-piccars" data-k="piccars">$40,350</td><td class="R cl" id="c-piccars">—</td></tr>
+      <tr><td>Misc Vehicle Rentals</td><td class="R editable" id="e-vehrents" data-k="vehrents">$2,500</td><td class="R cl" id="c-vehrents">—</td></tr>
+      <tr><td>Set Ops Equipment Rentals</td><td class="R editable" id="e-setrents" data-k="setrents">$32,350</td><td class="R cl" id="c-setrents">—</td></tr>
+      <tr><td>Dolly Rentals</td><td class="R editable" id="e-dolly" data-k="dolly">$6,000</td><td class="R cl" id="c-dolly">—</td></tr>
+      <tr><td>Lighting Package</td><td class="R editable" id="e-ltgpkg" data-k="ltgpkg">$31,900</td><td class="R cl" id="c-ltgpkg">—</td></tr>
+      <tr><td>Generator Rental</td><td class="R editable" id="e-genpkg" data-k="genpkg">$5,709</td><td class="R cl" id="c-genpkg">—</td></tr>
+      <tr><td>Camera Package</td><td class="R editable" id="e-campkg" data-k="campkg">$49,500</td><td class="R cl" id="c-campkg">—</td></tr>
+      <tr><td>Sound Package + Walkies</td><td class="R editable" id="e-sndpkg" data-k="sndpkg">$10,733</td><td class="R cl" id="c-sndpkg">—</td></tr>
+      <tr><td>SPFX Vendor / Materials</td><td class="R editable" id="e-spfxv" data-k="spfxv">$33,450</td><td class="R cl" id="c-spfxv">—</td></tr>
+      <tr><td>Wardrobe Shop Rental</td><td class="R editable" id="e-wdrent" data-k="wdrent">$1,169</td><td class="R cl" id="c-wdrent">—</td></tr>
+      <tr><td>Art Warehouse Storage</td><td class="R editable" id="e-artwh" data-k="artwh">$1,000</td><td class="R cl" id="c-artwh">—</td></tr>
+      <tr><td>Scouting Costs</td><td class="R editable" id="e-scout" data-k="scout">$2,500</td><td class="R cl" id="c-scout">—</td></tr>
+      <tr><td>Shipping</td><td class="R editable" id="e-ship" data-k="ship">$2,200</td><td class="R cl" id="c-ship">—</td></tr>
+      <tr><td>Production Mileage</td><td class="R editable" id="e-mile" data-k="mile">$16,313</td><td class="R cl" id="c-mile">—</td></tr>
+      <tr><td>Crew Drive Mileage</td><td class="R editable" id="e-cmile" data-k="cmile">$4,500</td><td class="R cl" id="c-cmile">—</td></tr>
+      <tr><td>Electric Truck + Fuel</td><td class="R editable" id="e-eltruck" data-k="eltruck">$8,200</td><td class="R cl" id="c-eltruck">—</td></tr>
+      <tr><td>Steadicam Rentals</td><td class="R editable" id="e-steadrent" data-k="steadrent">$7,500</td><td class="R cl" id="c-steadrent">—</td></tr>
+      <tr><td>IL Cast Van Rental</td><td class="R editable" id="e-vanrent" data-k="vanrent">$3,768</td><td class="R cl" id="c-vanrent">—</td></tr>
+      <tr><td>Computer/Server Rentals</td><td class="R editable" id="e-server" data-k="server">$2,400</td><td class="R cl" id="c-server">—</td></tr>
+      <tr style="background:#1a1a35"><td class="B">Total Qualified Spend</td><td class="R B" id="v-spbase">—</td><td class="R B cl" id="c-spbase">—</td></tr>
+    </table>
+  </div>
+
+  <!-- ALLOWANCES -->
+  <div class="chdr open" onclick="toggleSec(this,'gt-al')">
+    <span class="cht">&#128230; Allowances</span><span class="chv" id="gt-al-hdr">—</span><span class="arr">&#9660;</span>
+  </div>
+  <div class="cbody" id="gt-al">
+    <table>
+      <tr><th>Item</th><th class="R">Amount</th><th class="R">30% Credit</th></tr>
+      <tr><td>L&amp;D Allowances</td><td class="R" id="v-ld">—</td><td class="R cl" id="c-ld">—</td></tr>
+      <tr><td>Box Rentals</td><td class="R" id="v-box">—</td><td class="R cl" id="c-box">—</td></tr>
+      <tr><td>Car Allowances</td><td class="R" id="v-car">—</td><td class="R cl" id="c-car">—</td></tr>
+      <tr><td>Marketing / GE / Misc</td><td class="R" id="v-mk">—</td><td class="R cl" id="c-mk">—</td></tr>
+      <tr style="background:#1a1a35"><td class="B">Total Allowances</td><td class="R B" id="v-albase">—</td><td class="R B cl" id="c-albase">—</td></tr>
+    </table>
+  </div>
+
+  <!-- CAMERA ADD-ONS -->
+  <div class="chdr" onclick="toggleSec(this,'gt-cam')">
+    <span class="cht">&#127909; Camera Add-Ons</span><span class="chv" id="gt-cam-hdr">$0</span><span class="arr">&#9660;</span>
+  </div>
+  <div class="cbody hide" id="gt-cam">
+    <table>
+      <tr><th>Item</th><th class="R">Amount</th><th class="R">30% Credit</th></tr>
+      <tr><td>High Speed / Crash Cam</td><td class="R" id="v-hs">—</td><td class="R cl" id="c-hs">—</td></tr>
+      <tr><td>A-Cam Add-On</td><td class="R" id="v-acam">—</td><td class="R cl" id="c-acam">—</td></tr>
+    </table>
+  </div>
+
+  <!-- EDA UPLIFT -->
+  <div class="chdr open" onclick="toggleSec(this,'gt-up')">
+    <span class="cht">&#11088; EDA Uplift (15%)</span><span class="chv" id="gt-up-hdr">—</span><span class="arr">&#9660;</span>
+  </div>
+  <div class="cbody" id="gt-up">
+    <table>
+      <tr><th>Role</th><th class="R">Wages</th><th class="R">%</th><th class="R">Uplift Base</th><th class="R">15% Credit</th></tr>
+      <tr><td>Key PA <span class="tag LCL">LOCAL</span></td><td class="R editable" id="e-kepa" data-k="kepa">$5,363</td><td class="R">100%</td><td class="R" id="v-kepa-b">$5,363</td><td class="R purple B" id="c-kepa-up">$805</td></tr>
+      <tr><td>Set PAs (IL) <span class="tag LCL">LOCAL</span></td><td class="R editable" id="e-setpa" data-k="setpa">$26,015</td><td class="R">100%</td><td class="R" id="v-setpa-b">$26,015</td><td class="R purple B" id="c-setpa-up">$3,902</td></tr>
+      <tr><td>Office PAs (IL) <span class="tag LCL">LOCAL</span></td><td class="R editable" id="e-offpa" data-k="offpa">$7,260</td><td class="R">100%</td><td class="R" id="v-offpa-b">$7,260</td><td class="R purple B" id="c-offpa-up">$1,089</td></tr>
+      <tr><td>Art Dept PAs (IL) <span class="tag LCL">LOCAL</span></td><td class="R editable" id="e-artpa" data-k="artpa">$4,200</td><td class="R">100%</td><td class="R" id="v-artpa-b">$4,200</td><td class="R purple B" id="c-artpa-up">$630</td></tr>
+      <tr><td>Extra Talent (IL) <span class="tag LCL">LOCAL</span></td><td class="R editable" id="e-extras" data-k="extras">$46,448</td><td class="R" id="v-extp">85%</td><td class="R" id="v-extb">—</td><td class="R purple B" id="v-extc">—</td></tr>
+    </table>
+    <div class="srow">
+      <span style="color:#ce93d8;font-size:11px">Extras EDA %:</span>
+      <input type="range" min="75" max="100" value="85" id="lab-uslider" oninput="setUplift(+this.value)" style="width:160px">
+      <span style="color:#ce93d8;font-weight:700" id="lab-upct">85%</span>
+    </div>
+    <div style="padding:6px 12px;background:#0f0f20;display:flex;justify-content:space-between">
+      <span style="color:#ce93d8;font-weight:700">EDA Uplift Base</span><span style="color:#ce93d8;font-weight:700" id="v-upbase">—</span>
+    </div>
+    <div style="padding:4px 12px 10px;background:#0f0f20;display:flex;justify-content:space-between">
+      <span style="color:#ce93d8;font-weight:700">15% EDA Credit</span><span style="color:#ce93d8;font-weight:700;font-size:16px" id="v-upcredit">—</span>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="sgrid">
+    <div class="sbox"><h4>30% Labor Credit</h4><div class="sv green" id="s-lab">—</div></div>
+    <div class="sbox"><h4>30% Spend Credit</h4><div class="sv green" id="s-sp">—</div></div>
+    <div class="sbox"><h4>15% EDA Uplift</h4><div class="sv purple" id="s-up">—</div></div>
+    <div class="sbox"><h4>Total IL Credit</h4><div class="sv gold" id="s-tot">—</div></div>
+  </div>
+</div>
+
+<!-- ===== LABOR ===== -->
+<div id="tab-labor" class="content">
+  <h2 style="color:#7ec8ff;font-size:13px;margin-bottom:10px">Labor — Illinois Eligible Wages</h2>
+
+  <div class="shdr">ABOVE THE LINE</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th>Notes</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>Director — Cole Needham</td><td><span class="tag NR">NR Key</span></td><td>Non-res Key #1</td><td class="R editable" id="lab-director" data-k="director">$40,000</td><td class="R cl" id="lc-director">—</td></tr>
+    <tr><td>3rd EP / Exec Producer (acct 1202, loan-out)</td><td><span class="tag NR">NR Key</span></td><td>Non-res Key EP</td><td class="R editable" id="lab-ep1" data-k="ep1">$75,000</td><td class="R cl" id="lc-ep1">—</td></tr>
+    <tr><td>2nd EP — LA Producer (acct 1203) &nbsp;<input type="checkbox" id="lab-ep2" checked onchange="syncTgl('ep2',this.checked)"></td><td><span class="tag NR">NR Key</span></td><td>Toggle on/off</td><td class="R" id="lv-ep2">—</td><td class="R cl" id="lc-ep2">—</td></tr>
+    <tr><td>Assoc Producer — IL Producer (acct 1204) &nbsp;<input type="checkbox" id="lab-ap" checked onchange="syncTgl('ap',this.checked)"></td><td><span class="tag LCL">IL Local</span></td><td>IL hire, no NR slot</td><td class="R" id="lv-ap">—</td><td class="R cl" id="lc-ap">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="3" class="B">ATL Total</td><td class="R B" id="ldt-atl-w">—</td><td class="R B cl" id="ldt-atl">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">CAST — Non-Resident Actors (max 4, wages only — agency fees excluded from credit)</div>
+  <div class="note">Select up to 4. Only wages count toward IL credit — agency fees are excluded.</div>
+  <table>
+    <tr><th>Sel</th><th>Character</th><th>Actor</th><th class="R">Wages (credit eligible)</th><th class="R">30% Credit</th><th class="R">Agency Fee (excl.)</th></tr>
+    <tbody id="actor-rows"></tbody>
+    <tr style="background:#1a1a35"><td colspan="3"></td><td class="B cl R" id="cast-total">—</td><td class="B cl R" id="cast-credit">—</td><td class="R" style="color:#666">not in credit</td></tr>
+  </table>
+  <div class="warn" id="actor-warn"></div>
+
+  <div class="shdr" style="margin-top:6px">KELSO + MITCH — Dual Loan-Out / SAG</div>
+  <table>
+    <tr><th>Name / Component</th><th>Type</th><th class="R">Amount</th><th class="R">30% Credit</th><th style="width:60px">On?</th></tr>
+    <tr><td>Kelso — Loan-Out (prep $5K + wrap $2.5K)</td><td><span class="tag lo">LO</span></td><td class="R editable" id="e-klo" data-k="klo">$7,500</td><td class="R cl" id="lc-klo">—</td><td style="text-align:center"><input type="checkbox" id="lab-klo" checked onchange="syncTgl('klo',this.checked)"></td></tr>
+    <tr><td>Kelso — SAG Weekly (4 wks x $7,643)</td><td><span class="tag sag">SAG</span></td><td class="R editable" id="e-ksag" data-k="ksag">$30,572</td><td class="R cl" id="lc-ksag">—</td><td style="text-align:center"><input type="checkbox" id="lab-ksag" checked onchange="syncTgl('ksag',this.checked)"></td></tr>
+    <tr><td>Mitch — Loan-Out (prep $5K + wrap $2.5K)</td><td><span class="tag lo">LO</span></td><td class="R editable" id="e-mlo" data-k="mlo">$7,500</td><td class="R cl" id="lc-mlo">—</td><td style="text-align:center"><input type="checkbox" id="lab-mlo" checked onchange="syncTgl('mlo',this.checked)"></td></tr>
+    <tr><td>Mitch — SAG Weekly (4 wks x $7,643)</td><td><span class="tag sag">SAG</span></td><td class="R editable" id="e-msag" data-k="msag">$30,572</td><td class="R cl" id="lc-msag">—</td><td style="text-align:center"><input type="checkbox" id="lab-msag" checked onchange="syncTgl('msag',this.checked)"></td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">K+M Total</td><td class="R B" id="ldt-km-w">—</td><td class="R B cl" id="ldt-km">—</td><td></td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">PRODUCTION STAFF (2000)</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>1st Assistant Director</td><td><span class="tag lo">IL LO</span></td><td class="R editable" id="e-ad1" data-k="ad1">$45,000</td><td class="R cl" id="lc-ad1">—</td></tr>
+    <tr><td>2nd Assistant Director</td><td><span class="tag lo">IL LO</span></td><td class="R editable" id="e-ad2" data-k="ad2">$30,500</td><td class="R cl" id="lc-ad2">—</td></tr>
+    <tr><td>2nd 2nd AD (10 m/days x $900)</td><td><span class="tag lo">IL LO</span></td><td class="R editable" id="e-ad22" data-k="ad22">$9,000</td><td class="R cl" id="lc-ad22">—</td></tr>
+    <tr><td>Script Supervisor</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-scriptsup" data-k="scriptsup">$13,175</td><td class="R cl" id="lc-scriptsup">—</td></tr>
+    <tr><td>Location Manager</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-locmgr" data-k="locmgr">$21,175</td><td class="R cl" id="lc-locmgr">—</td></tr>
+    <tr><td>Asst Location Manager (m/days)</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-alocmgr" data-k="alocmgr">$4,725</td><td class="R cl" id="lc-alocmgr">—</td></tr>
+    <tr><td>Production Coordinator</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-prodco" data-k="prodco">$15,000</td><td class="R cl" id="lc-prodco">—</td></tr>
+    <tr><td>Script Clearance</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-scriptclr" data-k="scriptclr">$8,400</td><td class="R cl" id="lc-scriptclr">—</td></tr>
+    <tr><td>Asst Production Coordinator</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-aprodco" data-k="aprodco">$9,263</td><td class="R cl" id="lc-aprodco">—</td></tr>
+    <tr><td>Key PA</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-kepa2" data-k="kepa">$5,363</td><td class="R cl" id="lc-kepa">—</td></tr>
+    <tr><td>Set PAs — Illinois (29 days x 4)</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-setpa2" data-k="setpa">$26,015</td><td class="R cl" id="lc-setpa">—</td></tr>
+    <tr><td>Set PAs — Iowa (2 days x 4)</td><td><span class="tag IA">Iowa</span></td><td class="R editable" id="e-iapas" data-k="iapas">$1,080</td><td class="R no">—</td></tr>
+    <tr><td>Office PAs — Illinois</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-offpa2" data-k="offpa">$7,260</td><td class="R cl" id="lc-offpa">—</td></tr>
+    <tr><td>Prod Accountant <input type="checkbox" id="lab-prodacc" onchange="syncTgl('prodacc',this.checked)"> (as NR Key)</td><td><span class="tag lo">LO</span></td><td class="R editable" id="e-prodacc" data-k="prodacc_amt">$31,500</td><td class="R nr" id="lc-prodacc">—</td></tr>
+    <tr><td>Asst Production Accountant</td><td><span class="tag lo">LO</span></td><td class="R editable" id="e-aprodacc" data-k="aprodacc">$19,800</td><td class="R cl" id="lc-aprodacc">—</td></tr>
+    <tr><td>Accounting Clerk</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-acclerk" data-k="acclerk">$6,500</td><td class="R cl" id="lc-acclerk">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">2000 Dept Total</td><td class="R B" id="ldt-2000-w">—</td><td class="R B cl" id="ldt-2000">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">SET DESIGN (2200)</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>Production Designer</td><td><span class="tag lo">IL LO</span></td><td class="R editable" id="e-proddsgn" data-k="proddsgn">$30,000</td><td class="R cl" id="lc-proddsgn">—</td></tr>
+    <tr><td>Art Director</td><td><span class="tag lo">IL LO</span></td><td class="R editable" id="e-artdir" data-k="artdir">$21,000</td><td class="R cl" id="lc-artdir">—</td></tr>
+    <tr><td>Art Dept PAs (21 m/days x $200)</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-artpa2" data-k="artpa">$4,200</td><td class="R cl" id="lc-artpa">—</td></tr>
+    <tr><td>Graphic Designer</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-graphdsgn" data-k="graphdsgn">$8,125</td><td class="R cl" id="lc-graphdsgn">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">2200 Dept Total</td><td class="R B" id="ldt-2200-w">—</td><td class="R B cl" id="ldt-2200">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">SET OPERATIONS — GRIP &amp; CRAFT SERVICE (2500)</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>Key Grip</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-kgrip" data-k="kgrip">$16,000</td><td class="R cl" id="lc-kgrip">—</td></tr>
+    <tr><td>Best Boy Grip</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-bbgrip" data-k="bbgrip">$12,000</td><td class="R cl" id="lc-bbgrip">—</td></tr>
+    <tr><td>Company Grip #1</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-cogrip" data-k="cogrip">$8,100</td><td class="R cl" id="lc-cogrip">—</td></tr>
+    <tr><td>Dolly Grip</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-dollygrip" data-k="dollygrip">$8,000</td><td class="R cl" id="lc-dollygrip">—</td></tr>
+    <tr><td>Key Rigging Grip</td><td><span class="tag LA">LA Hire</span></td><td class="R editable" id="e-krigging" data-k="krigging">$12,200</td><td class="R no">— (excl.)</td></tr>
+    <tr><td>Add'l Grip M/Days — Illinois</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-xgripil" data-k="xgripil">$1,750</td><td class="R cl" id="lc-xgripil">—</td></tr>
+    <tr><td>Add'l Grip M/Days — Iowa</td><td><span class="tag IA">Iowa</span></td><td class="R editable" id="e-xgripia" data-k="xgripia">$1,750</td><td class="R no">—</td></tr>
+    <tr><td>Add'l Rigging — Illinois</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-xrigil" data-k="xrigil">$1,050</td><td class="R cl" id="lc-xrigil">—</td></tr>
+    <tr><td>Add'l Rigging — Iowa</td><td><span class="tag IA">Iowa</span></td><td class="R editable" id="e-xrigia" data-k="xrigia">$1,050</td><td class="R no">—</td></tr>
+    <tr><td>Key Craft Service</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-kcs" data-k="kcs">$9,720</td><td class="R cl" id="lc-kcs">—</td></tr>
+    <tr><td>Extra Craft Service Labor</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-xcs" data-k="xcs">$2,100</td><td class="R cl" id="lc-xcs">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">2500 Dept Total</td><td class="R B" id="ldt-2500-w">—</td><td class="R B cl" id="ldt-2500">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">SPECIAL EFFECTS (2600)</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>SPFX Supervisor</td><td><span class="tag MW">Midwest LO</span></td><td class="R editable" id="e-spfxsup" data-k="spfxsup">$8,438</td><td class="R cl" id="lc-spfxsup">—</td></tr>
+    <tr><td>SPFX 1st Assistant</td><td><span class="tag MW">Midwest LO</span></td><td class="R editable" id="e-spfx1" data-k="spfx1">$5,613</td><td class="R cl" id="lc-spfx1">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">2600 Dept Total</td><td class="R B" id="ldt-2600-w">—</td><td class="R B cl" id="ldt-2600">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">SET DRESSING (2700)</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>Set Decorator</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-setdec" data-k="setdec">$24,000</td><td class="R cl" id="lc-setdec">—</td></tr>
+    <tr><td>Leadman</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-leadman" data-k="leadman">$16,000</td><td class="R cl" id="lc-leadman">—</td></tr>
+    <tr><td>On-Set Dresser / Swing</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-swing" data-k="swing">$12,000</td><td class="R cl" id="lc-swing">—</td></tr>
+    <tr><td>Add'l Dressers</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-dressers" data-k="dressers">$6,000</td><td class="R cl" id="lc-dressers">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">2700 Dept Total</td><td class="R B" id="ldt-2700-w">—</td><td class="R B cl" id="ldt-2700">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">PROPERTY (2800)</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>Property Master</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-propmaster" data-k="propmaster">$24,700</td><td class="R cl" id="lc-propmaster">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">2800 Dept Total</td><td class="R B" id="ldt-2800-w">—</td><td class="R B cl" id="ldt-2800">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">WARDROBE (2900)</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>Costume Designer</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-costdsgn" data-k="costdsgn">$30,000</td><td class="R cl" id="lc-costdsgn">—</td></tr>
+    <tr><td>Key Wardrobe</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-keywd" data-k="keywd">$18,000</td><td class="R cl" id="lc-keywd">—</td></tr>
+    <tr><td>Costumer #1</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-cost1" data-k="cost1">$9,900</td><td class="R cl" id="lc-cost1">—</td></tr>
+    <tr><td>Add'l Costumers</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-xcost" data-k="xcost">$1,950</td><td class="R cl" id="lc-xcost">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">2900 Dept Total</td><td class="R B" id="ldt-2900-w">—</td><td class="R B cl" id="ldt-2900">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">MAKE-UP &amp; HAIR (3100)</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>Key Make-Up Artist</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-kmua" data-k="kmua">$16,000</td><td class="R cl" id="lc-kmua">—</td></tr>
+    <tr><td>Make-Up Artist</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-mua" data-k="mua">$10,900</td><td class="R cl" id="lc-mua">—</td></tr>
+    <tr><td>Add'l Make-Up Labor</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-xmua" data-k="xmua">$2,360</td><td class="R cl" id="lc-xmua">—</td></tr>
+    <tr><td>Key Hair Stylist</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-khair" data-k="khair">$16,000</td><td class="R cl" id="lc-khair">—</td></tr>
+    <tr><td>Hair Stylist</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-hair" data-k="hair">$10,900</td><td class="R cl" id="lc-hair">—</td></tr>
+    <tr><td>Add'l Hair Labor</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-xhair" data-k="xhair">$2,120</td><td class="R cl" id="lc-xhair">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">3100 Dept Total</td><td class="R B" id="ldt-3100-w">—</td><td class="R B cl" id="ldt-3100">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">PICTURE VEHICLES (3000)</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>Car Coordinator</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-carcoo" data-k="carcoo">$15,600</td><td class="R cl" id="lc-carcoo">—</td></tr>
+    <tr><td>Car Mechanics</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-carmech" data-k="carmech">$24,742</td><td class="R cl" id="lc-carmech">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">3000 Dept Total</td><td class="R B" id="ldt-3000-w">—</td><td class="R B cl" id="ldt-3000">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">LIGHTING (3200)</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>Gaffer</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-gaffer" data-k="gaffer">$18,000</td><td class="R cl" id="lc-gaffer">—</td></tr>
+    <tr><td>Best Boy Electric</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-bbe" data-k="bbe">$12,000</td><td class="R cl" id="lc-bbe">—</td></tr>
+    <tr><td>Electrician #1</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-elec1" data-k="elec1">$8,100</td><td class="R cl" id="lc-elec1">—</td></tr>
+    <tr><td>Extra Electric Labor (M/Days)</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-xelec" data-k="xelec">$3,400</td><td class="R cl" id="lc-xelec">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">3200 Dept Total</td><td class="R B" id="ldt-3200-w">—</td><td class="R B cl" id="ldt-3200">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">CAMERA (3300)</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>Director of Photography</td><td><span class="tag NR">NR Key</span><span class="tag LA">LA</span></td><td class="R editable" id="e-dp" data-k="dp">$45,000</td><td class="R cl" id="lc-dp">—</td></tr>
+    <tr><td>Steadicam Operator</td><td><span class="tag LA">LA Hire</span></td><td class="R editable" id="e-steadicam" data-k="steadicam">$22,500</td><td class="R no">— (excl.)</td></tr>
+    <tr><td>1st AC</td><td><span class="tag LA">LA Hire</span></td><td class="R editable" id="e-ac1" data-k="ac1">$23,000</td><td class="R no">— (excl.)</td></tr>
+    <tr><td>2nd AC</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-ac2" data-k="ac2">$14,625</td><td class="R cl" id="lc-ac2">—</td></tr>
+    <tr><td>Camera Loader</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-camload" data-k="camload">$11,200</td><td class="R cl" id="lc-camload">—</td></tr>
+    <tr><td>Camera Utility — Rico (IL local)</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-rico" data-k="rico">$7,500</td><td class="R cl" id="lc-rico">—</td></tr>
+    <tr><td>Still Photographer</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-stillphoto" data-k="stillphoto">$15,000</td><td class="R cl" id="lc-stillphoto">—</td></tr>
+    <tr><td>VTR / Video Assist</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-vtr" data-k="vtr">$13,120</td><td class="R cl" id="lc-vtr">—</td></tr>
+    <tr><td>Drone / Arm Car Team (LA crew)</td><td><span class="tag LA">LA Hire</span></td><td class="R editable" id="e-drone" data-k="drone">$120,000</td><td class="R no">— (excl.)</td></tr>
+    <tr><td>High Speed / Crash Cam &nbsp;<input type="checkbox" id="lab-hs" onchange="syncTgl('hs',this.checked)"></td><td><span class="tag LA">LA Hire</span></td><td class="R editable" id="e-hs" data-k="hs_amt">$21,500</td><td class="R no">— (excl.)</td></tr>
+    <tr><td>A-Cam Add-On &nbsp;<input type="checkbox" id="lab-acam" onchange="syncTgl('acam',this.checked)"></td><td><span class="tag LCL">IL Vendor</span></td><td class="R editable" id="e-acam" data-k="acam_amt">$15,000</td><td class="R cl" id="lc-acam">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">3300 Dept Total</td><td class="R B" id="ldt-3300-w">—</td><td class="R B cl" id="ldt-3300">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">PRODUCTION SOUND (3400)</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>Sound Mixer</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-sndmix" data-k="sndmix">$16,000</td><td class="R cl" id="lc-sndmix">—</td></tr>
+    <tr><td>Boom Operator</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-boomop" data-k="boomop">$10,720</td><td class="R cl" id="lc-boomop">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">3400 Dept Total</td><td class="R B" id="ldt-3400-w">—</td><td class="R B cl" id="ldt-3400">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">TRANSPORTATION (3500)</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>Transportation Coordinator</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-transcoo" data-k="transcoo">$22,000</td><td class="R cl" id="lc-transcoo">—</td></tr>
+    <tr><td>Transportation Captain</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-transcap" data-k="transcap">$17,600</td><td class="R cl" id="lc-transcap">—</td></tr>
+    <tr><td>Cast Van Driver (IL Phase)</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-vandrvil" data-k="vandrvil">$6,600</td><td class="R cl" id="lc-vandrvil">—</td></tr>
+    <tr><td>SUV Driver (Iowa Phase)</td><td><span class="tag IA">Iowa</span></td><td class="R editable" id="e-vandrvia" data-k="vandrvia">$4,950</td><td class="R no">—</td></tr>
+    <tr><td>Add'l Drivers (airport days)</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-xdrvrs" data-k="xdrvrs">$1,375</td><td class="R cl" id="lc-xdrvrs">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">3500 Dept Total</td><td class="R B" id="ldt-3500-w">—</td><td class="R B cl" id="ldt-3500">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">CATERING / LOCATION LABOR (3600)</div>
+  <table>
+    <tr><th>Position</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>Head Chef — Illinois</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-chef" data-k="chef">$14,875</td><td class="R cl" id="lc-chef">—</td></tr>
+    <tr><td>Catering Assistant</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-catast" data-k="catast">$12,325</td><td class="R cl" id="lc-catast">—</td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">3600 Dept Total</td><td class="R B" id="ldt-3600-w">—</td><td class="R B cl" id="ldt-3600">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:6px">EXTRA TALENT (2100)</div>
+  <table>
+    <tr><th>Category</th><th>Type</th><th class="R">Wages</th><th class="R">30% Credit</th></tr>
+    <tr><td>Extra Talent — Illinois</td><td><span class="tag LCL">IL Local</span></td><td class="R editable" id="e-extras2" data-k="extras">$46,448</td><td class="R cl" id="lc-extras">—</td></tr>
+  </table>
+
+  <div class="shdr" style="margin-top:8px;color:#ce93d8">EDA UPLIFT — 15% Additional Credit</div>
+  <div class="srow">
+    <span style="color:#ce93d8;font-size:11px">Extras EDA %:</span>
+    <input type="range" min="75" max="100" value="85" id="lab-uslider2" oninput="setUplift(+this.value)" style="width:160px">
+    <span style="color:#ce93d8;font-weight:700" id="lab-upct2">85%</span>
+  </div>
+  <table>
+    <tr><th>Role</th><th class="R">Wages</th><th class="R">%</th><th class="R">Uplift Base</th><th class="R">15% Credit</th></tr>
+    <tr style="background:#12122a"><td>Key PA</td><td class="R" id="lv-kepa-w">$5,363</td><td class="R">100%</td><td class="R" id="lv-kepa-b">$5,363</td><td class="R purple B" id="lv-kepa-c">$805</td></tr>
+    <tr style="background:#12122a"><td>Set PAs (IL)</td><td class="R" id="lv-setpa-w">$26,015</td><td class="R">100%</td><td class="R" id="lv-setpa-b">$26,015</td><td class="R purple B" id="lv-setpa-c">$3,902</td></tr>
+    <tr style="background:#12122a"><td>Office PAs (IL)</td><td class="R" id="lv-offpa-w">$7,260</td><td class="R">100%</td><td class="R" id="lv-offpa-b">$7,260</td><td class="R purple B" id="lv-offpa-c">$1,089</td></tr>
+    <tr style="background:#12122a"><td>Art Dept PAs (IL)</td><td class="R" id="lv-artpa-w">$4,200</td><td class="R">100%</td><td class="R" id="lv-artpa-b">$4,200</td><td class="R purple B" id="lv-artpa-c">$630</td></tr>
+    <tr style="background:#12122a"><td>Extra Talent (IL)</td><td class="R" id="lv-exwages">$46,448</td><td class="R" id="lv-exppct">85%</td><td class="R" id="lv-exbase">—</td><td class="R purple B" id="lv-excredit">—</td></tr>
+    <tr style="background:#1a0a2a"><td class="B" style="color:#ce93d8">EDA Totals</td><td></td><td></td><td class="R B purple" id="lv-upbase">—</td><td class="R B purple" style="font-size:14px" id="lv-upcredit">—</td></tr>
+  </table>
+</div>
+
+<!-- ===== QUALIFIED SPEND ===== -->
+<div id="tab-spend" class="content">
+  <h2 style="color:#7ec8ff;font-size:13px;margin-bottom:10px">Qualified IL Spend — Non-Labor</h2>
+  <div class="note" style="margin-bottom:10px">All amounts are editable (unlock the lock icon then click any value). 30% credit shown per line.</div>
+  <table>
+    <tr><th>Acct</th><th>Description</th><th class="R">Amount</th><th class="R">30% Credit</th></tr>
+    <tr><td colspan="4" class="shdr">CATERING &amp; CRAFT SERVICE</td></tr>
+    <tr><td>3622</td><td>Catering Expenses (meals, propane, truck)</td><td class="R editable" id="sp-catering" data-k="catering">$77,546</td><td class="R cl" id="sc-catering">—</td></tr>
+    <tr><td>3620/21</td><td>Catering Labor (Chef + Asst) — see Labor tab</td><td class="R" style="color:#555">$27,200</td><td class="R" style="color:#555">see Labor</td></tr>
+    <tr><td>2512</td><td>Craft Service Purchases (on-set + off-set)</td><td class="R editable" id="sp-cspurch" data-k="cspurch">$51,602</td><td class="R cl" id="sc-cspurch">—</td></tr>
+    <tr><td>2110</td><td>Extras Casting Fee <span class="tag LCL">IL Local</span></td><td class="R editable" id="sp-extcast" data-k="extcast">$5,250</td><td class="R cl" id="sc-extcast">—</td></tr>
+    <tr><td colspan="4" style="padding:3px 7px;background:#0d0d1a"><button class="add-btn" onclick="addSpendItem(this)">+ Add Item</button></td></tr>
+    <tr><td colspan="4" class="shdr">SECURITY &amp; SAFETY</td></tr>
+    <tr><td>3631</td><td>Police &amp; Fire (off-duty officers + ambulance)</td><td class="R editable" id="sp-polfire" data-k="polfire">$17,038</td><td class="R cl" id="sc-polfire">—</td></tr>
+    <tr><td>3613</td><td>Location Security Guards</td><td class="R editable" id="sp-locsec" data-k="locsec">$8,581</td><td class="R cl" id="sc-locsec">—</td></tr>
+    <tr><td colspan="4" style="padding:3px 7px;background:#0d0d1a"><button class="add-btn" onclick="addSpendItem(this)">+ Add Item</button></td></tr>
+    <tr><td colspan="4" class="shdr">PRODUCTION OFFICE</td></tr>
+    <tr><td>3640</td><td>Production Office Rental (IL, 2.25 months)</td><td class="R editable" id="sp-offrent" data-k="offrent">$9,788</td><td class="R cl" id="sc-offrent">—</td></tr>
+    <tr><td>3641</td><td>Prod Office Copiers + Copies</td><td class="R editable" id="sp-offsup" data-k="offsup">$6,199</td><td class="R cl" id="sc-offsup">—</td></tr>
+    <tr><td>2035</td><td>Computer/Server Rentals</td><td class="R editable" id="sp-server" data-k="server">$2,400</td><td class="R cl" id="sc-server">—</td></tr>
+    <tr><td>2085</td><td>Prod Staff Other Costs (misc supplies)</td><td class="R editable" id="sp-misc2085" data-k="misc2085">$2,500</td><td class="R cl" id="sc-misc2085">—</td></tr>
+    <tr><td colspan="4" style="padding:3px 7px;background:#0d0d1a"><button class="add-btn" onclick="addSpendItem(this)">+ Add Item</button></td></tr>
+    <tr><td colspan="4" class="shdr">CREW HOUSING &amp; TRAVEL</td></tr>
+    <tr><td>3604 01</td><td>East Moline AirBnBs (camera/arm car/grip)</td><td class="R editable" id="sp-housing" data-k="housing">$23,475</td><td class="R cl" id="sc-housing">—</td></tr>
+    <tr><td>3605 01</td><td>IL Crew Per Diems (camera + arm car, 6 wks)</td><td class="R editable" id="sp-perdiems" data-k="perdiems">$13,200</td><td class="R cl" id="sc-perdiems">—</td></tr>
+    <tr><td>3606</td><td>Scouting Costs</td><td class="R editable" id="sp-scout" data-k="scout">$2,500</td><td class="R cl" id="sc-scout">—</td></tr>
+    <tr><td>3614</td><td>Shipping</td><td class="R editable" id="sp-ship" data-k="ship">$2,200</td><td class="R cl" id="sc-ship">—</td></tr>
+    <tr><td colspan="4" style="padding:3px 7px;background:#0d0d1a"><button class="add-btn" onclick="addSpendItem(this)">+ Add Item</button></td></tr>
+    <tr><td colspan="4" class="shdr">MILEAGE &amp; FUEL</td></tr>
+    <tr><td>3544</td><td>Production Mileage (7,500 mi x $2.00 + ST)</td><td class="R editable" id="sp-mile" data-k="mile">$16,313</td><td class="R cl" id="sc-mile">—</td></tr>
+    <tr><td>3632</td><td>Crew Drive-to Mileage</td><td class="R editable" id="sp-cmile" data-k="cmile">$4,500</td><td class="R cl" id="sc-cmile">—</td></tr>
+    <tr><td>3230</td><td>Electric Dept Truck + Fuel</td><td class="R editable" id="sp-eltruck" data-k="eltruck">$8,200</td><td class="R cl" id="sc-eltruck">—</td></tr>
+    <tr><td>3585</td><td>Transport Other Costs (dept box rentals, misc) <span class="tag LCL">IL Local</span></td><td class="R editable" id="sp-misc3585" data-k="misc3585">$4,625</td><td class="R cl" id="sc-misc3585">—</td></tr>
+    <tr><td colspan="4" style="padding:3px 7px;background:#0d0d1a"><button class="add-btn" onclick="addSpendItem(this)">+ Add Item</button></td></tr>
+    <tr><td colspan="4" class="shdr">LOCATION FEES (IL ONLY)</td></tr>
+    <tr><td>3607 01</td><td>Sam's House — East Moline</td><td class="R editable" id="sp-loc01" data-k="loc01">$4,625</td><td class="R cl" id="sc-loc01">—</td></tr>
+    <tr><td>3607 02</td><td>Ben's House / Garage / Yard</td><td class="R editable" id="sp-loc02" data-k="loc02">$7,000</td><td class="R cl" id="sc-loc02">—</td></tr>
+    <tr><td>3607 03</td><td>Franky's Bar</td><td class="R editable" id="sp-loc03" data-k="loc03">$6,000</td><td class="R cl" id="sc-loc03">—</td></tr>
+    <tr><td>3607 04</td><td>Home Improvement Store</td><td class="R editable" id="sp-loc04" data-k="loc04">$6,000</td><td class="R cl" id="sc-loc04">—</td></tr>
+    <tr><td>3607 05</td><td>Strip Club</td><td class="R editable" id="sp-loc05" data-k="loc05">$2,100</td><td class="R cl" id="sc-loc05">—</td></tr>
+    <tr><td>3607 06</td><td>Hospital</td><td class="R editable" id="sp-loc06" data-k="loc06">$8,500</td><td class="R cl" id="sc-loc06">—</td></tr>
+    <tr><td>3607 07</td><td>Warehouse / Donny's Office</td><td class="R editable" id="sp-loc07" data-k="loc07">$15,000</td><td class="R cl" id="sc-loc07">—</td></tr>
+    <tr><td>3607 08-11</td><td>Police Station / Jail / Mini Golf / Field</td><td class="R editable" id="sp-loc08" data-k="loc08">$1,400</td><td class="R cl" id="sc-loc08">—</td></tr>
+    <tr><td>3607 12</td><td>Burger Cafe</td><td class="R editable" id="sp-loc12" data-k="loc12">$2,500</td><td class="R cl" id="sc-loc12">—</td></tr>
+    <tr><td>3607 13</td><td>Biker Bar</td><td class="R editable" id="sp-loc13" data-k="loc13">$3,900</td><td class="R cl" id="sc-loc13">—</td></tr>
+    <tr><td>3607 16</td><td>Gas Station</td><td class="R editable" id="sp-loc16" data-k="loc16">$1,200</td><td class="R cl" id="sc-loc16">—</td></tr>
+    <tr><td>3607 17</td><td>Grocery Store Parking Lot</td><td class="R editable" id="sp-loc17" data-k="loc17">$3,200</td><td class="R cl" id="sc-loc17">—</td></tr>
+    <tr><td>3607 18</td><td>Jenny's House</td><td class="R editable" id="sp-loc18" data-k="loc18">$5,000</td><td class="R cl" id="sc-loc18">—</td></tr>
+    <tr><td>3607 20</td><td>Bridge (IDOT / Traffic / IL State Police)</td><td class="R editable" id="sp-loc20" data-k="loc20">$12,756</td><td class="R cl" id="sc-loc20">—</td></tr>
+    <tr><td>3607 21</td><td>MVF Speedway — Davenport, IL</td><td class="R editable" id="sp-loc21" data-k="loc21">$12,000</td><td class="R cl" id="sc-loc21">—</td></tr>
+    <tr><td colspan="4" style="padding:3px 7px;background:#0d0d1a"><button class="add-btn" onclick="addSpendItem(this)">+ Add Item</button></td></tr>
+    <tr><td colspan="4" class="shdr">EQUIPMENT RENTALS</td></tr>
+    <tr><td>2518</td><td>Set Ops Equipment Rentals (3-ton + rigs + mounts)</td><td class="R editable" id="sp-setrents" data-k="setrents">$32,350</td><td class="R cl" id="sc-setrents">—</td></tr>
+    <tr><td>2520</td><td>Dolly Rentals</td><td class="R editable" id="sp-dolly" data-k="dolly">$6,000</td><td class="R cl" id="sc-dolly">—</td></tr>
+    <tr><td>2585</td><td>Grip / Set Ops Other Costs (misc equip, supplies)</td><td class="R editable" id="sp-misc2585" data-k="misc2585">$1,500</td><td class="R cl" id="sc-misc2585">—</td></tr>
+    <tr><td>3217</td><td>Lighting Package</td><td class="R editable" id="sp-ltgpkg" data-k="ltgpkg">$31,900</td><td class="R cl" id="sc-ltgpkg">—</td></tr>
+    <tr><td>3211</td><td>Generator Rental</td><td class="R editable" id="sp-genpkg" data-k="genpkg">$5,709</td><td class="R cl" id="sc-genpkg">—</td></tr>
+    <tr><td>3285</td><td>Lighting Other Costs (misc fixtures, supplies)</td><td class="R editable" id="sp-misc3285" data-k="misc3285">$1,500</td><td class="R cl" id="sc-misc3285">—</td></tr>
+    <tr><td>3320</td><td>Camera Package</td><td class="R editable" id="sp-campkg" data-k="campkg">$49,500</td><td class="R cl" id="sc-campkg">—</td></tr>
+    <tr><td>3785</td><td>Camera Media Cards (SD / CFexpress)</td><td class="R editable" id="sp-camcards" data-k="camcards">$12,000</td><td class="R cl" id="sc-camcards">—</td></tr>
+    <tr><td>3319</td><td>Steadicam Rentals</td><td class="R editable" id="sp-steadrent" data-k="steadrent">$7,500</td><td class="R cl" id="sc-steadrent">—</td></tr>
+    <tr><td>3418/22</td><td>Sound Package + Walkie Talkies</td><td class="R editable" id="sp-sndpkg" data-k="sndpkg">$10,733</td><td class="R cl" id="sc-sndpkg">—</td></tr>
+    <tr><td colspan="4" style="padding:3px 7px;background:#0d0d1a"><button class="add-btn" onclick="addSpendItem(this)">+ Add Item</button></td></tr>
+    <tr><td colspan="4" class="shdr">PICTURE CARS &amp; VEHICLES</td></tr>
+    <tr><td>3000 01</td><td>Hero Vehicle — Astro Van Build (IL)</td><td class="R editable" id="sp-pcvan" data-k="pcvan">$29,500</td><td class="R cl" id="sc-pcvan">—</td></tr>
+    <tr><td>3000 02</td><td>Race Cars Build (IL)</td><td class="R editable" id="sp-pcrace" data-k="pcrace">$44,000</td><td class="R cl" id="sc-pcrace">—</td></tr>
+    <tr><td>3008</td><td>Picture Car Rentals — incl. atmospheric (IL vendors)</td><td class="R editable" id="sp-piccars" data-k="piccars">$40,350</td><td class="R cl" id="sc-piccars">—</td></tr>
+    <tr><td>3009</td><td>Stunt / Destruction Costs</td><td class="R editable" id="sp-stuntdest" data-k="stuntdest">$2,500</td><td class="R cl" id="sc-stuntdest">—</td></tr>
+    <tr><td>3010</td><td>Misc Vehicle Rentals</td><td class="R editable" id="sp-vehrents" data-k="vehrents">$2,500</td><td class="R cl" id="sc-vehrents">—</td></tr>
+    <tr><td>3519 03</td><td>IL Cast Van Rental</td><td class="R editable" id="sp-vanrent" data-k="vanrent">$3,768</td><td class="R cl" id="sc-vanrent">—</td></tr>
+    <tr><td colspan="4" style="padding:3px 7px;background:#0d0d1a"><button class="add-btn" onclick="addSpendItem(this)">+ Add Item</button></td></tr>
+    <tr><td colspan="4" class="shdr">HAIR &amp; MAKEUP — NON-LABOR (3100)</td></tr>
+    <tr><td>3105</td><td>Make-Up Purchases</td><td class="R editable" id="sp-muapur" data-k="muapur">$2,000</td><td class="R cl" id="sc-muapur">—</td></tr>
+    <tr><td>3106</td><td>Make-Up Rentals (kit / effects supplies)</td><td class="R editable" id="sp-muarent" data-k="muarent">$1,715</td><td class="R cl" id="sc-muarent">—</td></tr>
+    <tr><td>3115</td><td>Prosthetics Manufacturing &amp; Labor</td><td class="R editable" id="sp-prosth" data-k="prosth">$5,000</td><td class="R cl" id="sc-prosth">—</td></tr>
+    <tr><td>3116</td><td>Hair Purchases (wigs, extensions, supplies)</td><td class="R editable" id="sp-hairpur" data-k="hairpur">$2,000</td><td class="R cl" id="sc-hairpur">—</td></tr>
+    <tr><td colspan="4" style="padding:3px 7px;background:#0d0d1a"><button class="add-btn" onclick="addSpendItem(this)">+ Add Item</button></td></tr>
+    <tr><td colspan="4" class="shdr">SPFX VENDOR</td></tr>
+    <tr><td>2616+</td><td>SPFX Materials / Vendor Costs</td><td class="R editable" id="sp-spfxv" data-k="spfxv">$33,450</td><td class="R cl" id="sc-spfxv">—</td></tr>
+    <tr><td colspan="4" style="padding:3px 7px;background:#0d0d1a"><button class="add-btn" onclick="addSpendItem(this)">+ Add Item</button></td></tr>
+    <tr><td colspan="4" class="shdr">SET DRESSING — NON-LABOR (2700)</td></tr>
+    <tr><td>2712</td><td>Manufacturing / Materials</td><td class="R editable" id="sp-setmat" data-k="setmat">$3,250</td><td class="R cl" id="sc-setmat">—</td></tr>
+    <tr><td>2716</td><td>Set Dressing Purchases &amp; Rentals — all IL locations (aggregate)</td><td class="R editable" id="sp-sdpur" data-k="sdpur">$34,700</td><td class="R cl" id="sc-sdpur">—</td></tr>
+    <tr><td>2718</td><td>Set Dressing Rentals (external — furniture, fixtures, etc.)</td><td class="R editable" id="sp-sdrent" data-k="sdrent">$1,500</td><td class="R cl" id="sc-sdrent">—</td></tr>
+    <tr><td colspan="4" style="padding:3px 7px;background:#0d0d1a"><button class="add-btn" onclick="addSpendItem(this)">+ Add Item</button></td></tr>
+    <tr><td colspan="4" class="shdr">PROPERTY — NON-LABOR (2800)</td></tr>
+    <tr><td>2812</td><td>Manufactured Props</td><td class="R editable" id="sp-propman" data-k="propman">$11,975</td><td class="R cl" id="sc-propman">—</td></tr>
+    <tr><td>2815</td><td>Prop Food</td><td class="R editable" id="sp-propfood" data-k="propfood">$3,371</td><td class="R cl" id="sc-propfood">—</td></tr>
+    <tr><td>2816</td><td>Prop Purchases</td><td class="R editable" id="sp-proppur" data-k="proppur">$14,135</td><td class="R cl" id="sc-proppur">—</td></tr>
+    <tr><td>2817</td><td>Prop Rentals</td><td class="R editable" id="sp-proprent" data-k="proprent">$22,740</td><td class="R cl" id="sc-proprent">—</td></tr>
+    <tr><td>2820 01</td><td>IL Armorer / Weapons Expert Fee</td><td class="R editable" id="sp-armorer" data-k="armorer">$4,830</td><td class="R cl" id="sc-armorer">—</td></tr>
+    <tr><td>2821</td><td>Guns &amp; Weapons (IL purchase / rental)</td><td class="R editable" id="sp-weapons" data-k="weapons">$9,214</td><td class="R cl" id="sc-weapons">—</td></tr>
+    <tr><td>2900</td><td>Props Other Costs</td><td class="R editable" id="sp-propoth" data-k="propoth">$500</td><td class="R cl" id="sc-propoth">—</td></tr>
+    <tr><td colspan="4" style="padding:3px 7px;background:#0d0d1a"><button class="add-btn" onclick="addSpendItem(this)">+ Add Item</button></td></tr>
+    <tr><td colspan="4" class="shdr">WARDROBE — NON-LABOR (2900)</td></tr>
+    <tr><td>2908</td><td>Alterations &amp; Repairs (incl. aging / distressing)</td><td class="R editable" id="sp-wdalt" data-k="wdalt">$5,000</td><td class="R cl" id="sc-wdalt">—</td></tr>
+    <tr><td>2909</td><td>Cleaning &amp; Dyeing</td><td class="R editable" id="sp-wdcln" data-k="wdcln">$3,426</td><td class="R cl" id="sc-wdcln">—</td></tr>
+    <tr><td>2916 01</td><td>Cast Wardrobe Purchases &amp; Rentals</td><td class="R editable" id="sp-wdcast" data-k="wdcast">$27,850</td><td class="R cl" id="sc-wdcast">—</td></tr>
+    <tr><td>2916 02</td><td>Stunts / Extras Wardrobe Purchases</td><td class="R editable" id="sp-wdstnt" data-k="wdstnt">$6,500</td><td class="R cl" id="sc-wdstnt">—</td></tr>
+    <tr><td colspan="4" style="padding:3px 7px;background:#0d0d1a"><button class="add-btn" onclick="addSpendItem(this)">+ Add Item</button></td></tr>
+    <tr><td colspan="4" class="shdr">STORAGE &amp; FACILITY</td></tr>
+    <tr><td>2776</td><td>Art Dept Warehouse (2.5 mo x $400)</td><td class="R editable" id="sp-artwh" data-k="artwh">$1,000</td><td class="R cl" id="sc-artwh">—</td></tr>
+    <tr><td>2976</td><td>Wardrobe Shop Rental</td><td class="R editable" id="sp-wdrent" data-k="wdrent">$1,169</td><td class="R cl" id="sc-wdrent">—</td></tr>
+    <tr><td>2985</td><td>Wardrobe Other Costs (misc purchases, alterations)</td><td class="R editable" id="sp-misc2985" data-k="misc2985">$1,500</td><td class="R cl" id="sc-misc2985">—</td></tr>
+    <tr><td>2219</td><td>Set Design Storage Rental</td><td class="R editable" id="sp-setstore" data-k="setstore">$844</td><td class="R cl" id="sc-setstore">—</td></tr>
+    <tr><td colspan="4" style="padding:3px 7px;background:#0d0d1a"><button class="add-btn" onclick="addSpendItem(this)">+ Add Item</button></td></tr>
+    <tr style="background:#1a1a35"><td colspan="2" class="B">TOTAL QUALIFIED SPEND</td><td class="R B" id="sp-total">—</td><td class="R B cl" id="sc-total">—</td></tr>
+  </table>
+</div>
+
+<!-- ===== ALLOWANCES ===== -->
+<div id="tab-allow" class="content">
+  <h2 style="color:#7ec8ff;font-size:13px;margin-bottom:10px">Allowances</h2>
+  <table>
+    <tr><th>On?</th><th>Category</th><th class="R">Amount</th><th class="R">30% Credit</th></tr>
+    <tr><td><input type="checkbox" id="al-ld" checked onchange="syncTgl('ld',this.checked)"></td><td>Loss &amp; Damage Allowances</td><td class="R editable" id="al-ld-v" data-k="ld_amt">$18,500</td><td class="R cl" id="al-ld-c">—</td></tr>
+    <tr><td><input type="checkbox" id="al-box" checked onchange="syncTgl('box',this.checked)"></td><td>Box / Kit Rentals (all depts)</td><td class="R editable" id="al-box-v" data-k="box_amt">$36,325</td><td class="R cl" id="al-box-c">—</td></tr>
+    <tr><td><input type="checkbox" id="al-car" checked onchange="syncTgl('car',this.checked)"></td><td>Car Allowances (dept heads)</td><td class="R editable" id="al-car-v" data-k="car_amt">$17,005</td><td class="R cl" id="al-car-c">—</td></tr>
+    <tr><td><input type="checkbox" id="al-mk" checked onchange="syncTgl('mk',this.checked)"></td><td>Marketing / GE / Misc</td><td class="R editable" id="al-mk-v" data-k="mk_amt">$76,144</td><td class="R cl" id="al-mk-c">—</td></tr>
+    <tr style="background:#1a1a35"><td></td><td class="B">Total Allowances</td><td class="R B" id="al-base">—</td><td class="R B cl" id="al-credit">—</td></tr>
+  </table>
+</div>
+
+<!-- ===== IOWA ===== -->
+<div id="tab-iowa" class="content">
+  <h2 style="color:#7ec8ff;font-size:13px;margin-bottom:10px">Iowa Exclusions</h2>
+  <div class="note" style="margin-bottom:10px">2 Iowa days (Newton, IA). Iowa-sourced spend excluded from IL credit.</div>
+  <table>
+    <tr><th>Category</th><th class="R">Amount</th><th>Reason</th></tr>
+    <tr><td>Hotel — Newton IA</td><td class="R editable" id="ia-hotel" data-k="iowa_hotel">$17,205</td><td class="no">Iowa sourced</td></tr>
+    <tr><td>Per Diems — Newton IA</td><td class="R editable" id="ia-pd" data-k="iowa_pd">$4,650</td><td class="no">Iowa sourced</td></tr>
+    <tr><td>Set PAs — Iowa</td><td class="R editable" id="ia-pas" data-k="iapas">$1,080</td><td class="no">Iowa labor</td></tr>
+    <tr><td>NASCAR Iowa Speedway Fee</td><td class="R editable" id="ia-site" data-k="iowa_site">$7,500</td><td class="no">Iowa location</td></tr>
+    <tr><td>SUV Driver — Iowa Phase</td><td class="R editable" id="ia-drv" data-k="vandrvia">$4,950</td><td class="no">Iowa labor</td></tr>
+    <tr><td>Extra Grip M/Days — Iowa</td><td class="R editable" id="ia-grip" data-k="xgripia">$1,750</td><td class="no">Iowa labor</td></tr>
+    <tr><td>Extra Rigging — Iowa</td><td class="R editable" id="ia-rig" data-k="xrigia">$1,050</td><td class="no">Iowa labor</td></tr>
+    <tr style="background:#1a1a35"><td class="B">Total Iowa Exclusions</td><td class="R B no" id="ia-total">—</td><td></td></tr>
+  </table>
+</div>
+
+<!-- ===== CAPS ===== -->
+<div id="tab-caps" class="content">
+  <h2 style="color:#7ec8ff;font-size:13px;margin-bottom:10px">Minimums, Caps &amp; Compliance</h2>
+  <div class="infobox"><h3>30-Day IL Minimum</h3>
+    <table style="margin:0"><tr><td>IL Shoot Days</td><td class="yes B R">29 days</td></tr><tr><td>IL Prep Weeks</td><td class="yes R">5 weeks</td></tr><tr><td>Status</td><td class="yes B R">Met</td></tr></table>
+  </div>
+  <div class="infobox"><h3>Non-Resident Key Crew (Max 13)</h3>
+    <table style="margin:0">
+      <tr><th>#</th><th>Position</th><th>Person</th><th class="R">Wages</th></tr>
+      <tr><td>1</td><td>Director</td><td>Cole Needham</td><td class="R">$40,000</td></tr>
+      <tr><td>2</td><td>1st EP (loan-out)</td><td>Loan-Out</td><td class="R">$75,000</td></tr>
+      <tr><td>3</td><td>2nd EP (toggle)</td><td>LA Producer</td><td class="R" id="cap-ep2">$40,000</td></tr>
+      <tr><td>4</td><td>DP</td><td>TBD (LA)</td><td class="R">$45,000</td></tr>
+      <tr><td>5</td><td>Prod Accountant (toggle)</td><td>Loan-Out</td><td class="R" id="cap-prodacc">$0 (off)</td></tr>
+      <tr><td>6–13</td><td colspan="2" style="color:#666;font-style:italic">Available</td><td class="R" style="color:#666">8 slots open</td></tr>
+    </table>
+  </div>
+  <div class="infobox"><h3>Non-Resident Actors (Max 4)</h3>
+    <div id="caps-cast">—</div>
+    <div class="note">Agency fees not included in credit base.</div>
+  </div>
+  <div class="infobox"><h3>$500K Per-Person Cap</h3><div class="yes">No individual reaches $500K. Highest: EP1 $75,000.</div></div>
+  <div class="infobox"><h3>IL Loan-Out Requirements (IDOR Dec 2025)</h3>
+    <div style="line-height:2;font-size:12px">
+      <div class="yes">4.95% IL withholding on all loan-out wages</div>
+      <div class="yes">IDOR registration per entity</div>
+      <div class="yes">IL Secretary of State registration</div>
+      <div class="yes">Form IL-941 filing</div>
+      <div class="warn">Entities to confirm: 1st AD, 2nd AD, Prod Designer, Art Director, SPFX Sup, Asst Prod Accountant, Kelso, Mitch</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DEFAULTS — every editable value is here
+// ============================================================
+var D = {
+  budget:5117417,
+  director:40000, ep1:75000,
+  ep2_amt:40000, ap_amt:40000, dp:45000,
+  klo:7500, ksag:30572, mlo:7500, msag:30572,
+  btl_lo:910315, btl_local:212674,
+  // spend
+  catering:77546, cspurch:51602, polfire:17038,
+  offrent:9788, offsup:6199, housing:23475,
+  perdiems:13200, locsec:8581, locfees:91181,
+  piccars:40350, vehrents:2500, setrents:32350,
+  dolly:6000, ltgpkg:31900, genpkg:5709,
+  campkg:49500, sndpkg:10733, spfxv:33450,
+  wdrent:1169, artwh:1000, scout:2500,
+  ship:2200, mile:16313, cmile:4500,
+  eltruck:8200, steadrent:7500, vanrent:3768, server:2400,
+  setstore:844,
+  // dept other costs (IL-eligible)
+  extcast:5250, camcards:12000,
+  misc2085:2500, misc2585:1500, misc2985:1500, misc3285:1500, misc3585:4625,
+  // set dressing non-labor
+  setmat:3250, sdpur:34700, sdrent:1500,
+  // property non-labor
+  propman:11975, propfood:3371, proppur:14135, proprent:22740,
+  armorer:4830, weapons:9214, propoth:500,
+  // wardrobe non-labor
+  wdalt:5000, wdcln:3426, wdcast:27850, wdstnt:6500,
+  // picture car builds
+  pcvan:29500, pcrace:44000, stuntdest:2500,
+  // hair & makeup non-labor
+  muapur:2000, muarent:1715, prosth:5000, hairpur:2000,
+  // locations
+  loc01:4625,loc02:7000,loc03:6000,loc04:6000,loc05:2100,
+  loc06:8500,loc07:15000,loc08:1400,loc12:2500,loc13:3900,
+  loc16:1200,loc17:3200,loc18:5000,loc20:12756,loc21:12000,
+  // allowances
+  ld_amt:18500, box_amt:36325, car_amt:17005, mk_amt:76144,
+  // cam add-ons
+  hs_amt:21500, acam_amt:15000,
+  // iowa
+  iowa_hotel:17205, iowa_pd:4650, iowa_site:7500,
+  // uplift (editable wages)
+  kepa:5363, setpa:26015, offpa:7260, artpa:4200, extras:46448,
+  // labor crew (individual editable)
+  ad1:45000,ad2:30500,ad22:9000,scriptsup:13175,locmgr:21175,
+  alocmgr:4725,prodco:15000,scriptclr:8400,aprodco:9263,
+  aprodacc:19800,acclerk:6500,prodacc_amt:31500,
+  proddsgn:30000,artdir:21000,graphdsgn:8125,
+  kgrip:16000,bbgrip:12000,cogrip:8100,dollygrip:8000,
+  krigging:12200,xgripil:1750,xgripia:1750,xrigil:1050,xrigia:1050,
+  kcs:9720,xcs:2100,
+  spfxsup:8438,spfx1:5613,
+  setdec:24000,leadman:16000,swing:12000,dressers:6000,
+  propmaster:24700,
+  costdsgn:30000,keywd:18000,cost1:9900,xcost:1950,
+  kmua:16000,mua:10900,xmua:2360,khair:16000,hair:10900,xhair:2120,
+  carcoo:15600,carmech:24742,
+  gaffer:18000,bbe:12000,elec1:8100,xelec:3400,
+  dp:45000,steadicam:22500,ac1:23000,ac2:14625,camload:11200,
+  rico:7500,stillphoto:15000,vtr:13120,drone:120000,
+  transcoo:22000,transcap:17600,vandrvil:6600,vandrvia:4950,xdrvrs:1375,
+  chef:14875,catast:12325,
+  iapas:1080
+};
+
+// State
+var T = {
+  ep2:true,ap:true,prodacc:false,
+  klo:true,ksag:true,mlo:true,msag:true,
+  ld:true,box:true,car:true,mk:true,
+  hs:false,acam:false,
+  upct:85,
+  actors:['SAM','RICH','VAL','GENE'],
+  OV:{}
+};
+
+var ACTORS = [
+  {id:'SAM',name:'Sam Hillman',real:'Andrew Barth Feldman',wages:90000},
+  {id:'RICH',name:'Rich',real:'TBD',wages:45000},
+  {id:'VAL',name:'Val',real:'Frank Grillo',wages:37500},
+  {id:'GENE',name:'Gene',real:'Jelly Roll',wages:30000},
+  {id:'DONNY',name:'Donny',real:'Billy Bob Thornton',wages:30000},
+  {id:'JENNY',name:'Jenny',real:'Victoria Pedretti',wages:30000},
+  {id:'BEN',name:'Ben Wilson',real:'Shane Sandler',wages:25956},
+  {id:'HANK',name:'Hank',real:'Tony Stewart',wages:6000},
+  {id:'PATRICIA',name:'Patricia',real:'TBD',wages:4500},
+  {id:'FRANK',name:'Frank',real:'Matty Cardrople',wages:2500},
+  {id:'COSTELLO',name:'Dr. Costello',real:'TBD',wages:2500},
+];
+
+function g(k){return T.OV[k]!==undefined?T.OV[k]:D[k];}
+function f(n){return '$'+Math.round(n).toLocaleString();}
+function s(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+
+// All spend keys for GT and Spend tabs
+var SPKEYS=['catering','cspurch','extcast','polfire','offrent','offsup','misc2085','housing','perdiems',
+  'locsec','misc2585','piccars','vehrents','misc3585','setrents','dolly','ltgpkg','genpkg','misc3285','campkg','camcards',
+  'sndpkg','spfxv',
+  'setmat','sdpur','sdrent',
+  'propman','propfood','proppur','proprent','armorer','weapons','propoth',
+  'wdalt','wdcln','wdcast','wdstnt',
+  'pcvan','pcrace','stuntdest',
+  'muapur','muarent','prosth','hairpur',
+  'wdrent','misc2985','artwh','scout','ship','mile','cmile',
+  'eltruck','steadrent','vanrent','server','setstore',
+  'loc01','loc02','loc03','loc04','loc05','loc06','loc07','loc08',
+  'loc12','loc13','loc16','loc17','loc18','loc20','loc21'];
+
+// Sync toggles across tabs
+var TMAP = {
+  ep2:['gt-ep2','lab-ep2'],
+  ap:['gt-ap','lab-ap'],
+  prodacc:['gt-prodacc','lab-prodacc'],
+  klo:['gt-klo','lab-klo'],
+  ksag:['gt-ksag','lab-ksag'],
+  mlo:['gt-mlo','lab-mlo'],
+  msag:['gt-msag','lab-msag'],
+  ld:['gt-ld','al-ld'],
+  box:['gt-box','al-box'],
+  car:['gt-car','al-car'],
+  mk:['gt-mk','al-mk'],
+  hs:['gt-hs','lab-hs'],
+  acam:['gt-acam','lab-acam']
+};
+function syncTgl(k,v){
+  T[k]=v;
+  var ids=TMAP[k]||[];
+  for(var i=0;i<ids.length;i++){var e=document.getElementById(ids[i]);if(e)e.checked=v;}
+  recalc();
+}
+
+function setUplift(v){
+  T.upct=v;
+  ['gt-uslider','lab-uslider','lab-uslider2'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=v;});
+  ['gt-upct','lab-upct','lab-upct2'].forEach(function(id){s(id,v+'%');});
+  s('v-extp',v+'%');s('lv-exppct',v+'%');
+  recalc();
+}
+
+var cspIdx=0;
+function addSpendItem(btn){
+  var acct=prompt('Account # (e.g. 3607 22):','');if(acct===null)return;
+  var desc=prompt('Description:','');if(desc===null||!desc.trim())return;
+  var raw=prompt('Amount ($):','0');if(raw===null)return;
+  var n=parseFloat(raw.replace(/[$,\s]/g,''));if(isNaN(n)||n<0){alert('Enter a valid number.');return;}
+  var k='csp_'+cspIdx++;
+  D[k]=n;T.OV[k]=n;
+  SPKEYS.push(k);
+  var tr=document.createElement('tr');
+  tr.dataset.cspKey=k;
+  tr.innerHTML='<td>'+acct+'</td><td>'+desc+' <span style="color:#555;font-size:9px">[custom]</span></td>'+
+    '<td class="R editable" data-k="'+k+'">'+f(n)+'</td>'+
+    '<td class="R cl" id="sc-'+k+'" style="display:flex;align-items:center;justify-content:flex-end;gap:6px">'+
+      '<span id="sc-'+k+'-v">'+f(n*0.3)+'</span>'+
+      '<button onclick="deleteSpendItem(this)" style="font-size:9px;background:#3a1a1a;border:1px solid #6a2a2a;color:#ef9a9a;padding:1px 5px;border-radius:3px;cursor:pointer" title="Remove this item">&times;</button>'+
+    '</td>';
+  btn.closest('tr').parentNode.insertBefore(tr,btn.closest('tr'));
+  recalc();
+}
+function deleteSpendItem(btn){
+  var tr=btn.closest('tr');
+  var k=tr.dataset.cspKey;
+  if(!k)return;
+  SPKEYS=SPKEYS.filter(function(x){return x!==k;});
+  delete D[k];delete T.OV[k];
+  tr.parentNode.removeChild(tr);
+  recalc();
+}
+
+function buildActors(){
+  var tb=document.getElementById('actor-rows');if(!tb)return;
+  tb.innerHTML='';
+  ACTORS.forEach(function(a){
+    var sel=T.actors.indexOf(a.id)>=0;
+    var ag=Math.round(a.wages*0.10);
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td><input type="checkbox"'+(sel?' checked':'')+'onchange="toggleActor(\''+a.id+'\',this.checked)"></td>'+
+      '<td>'+a.name+'</td><td style="color:#777">'+a.real+'</td>'+
+      '<td class="R '+(sel?'cl':'no')+'">'+(sel?f(a.wages):'—')+'</td>'+
+      '<td class="R cl">'+(sel?f(a.wages*0.3):'—')+'</td>'+
+      '<td class="R" style="color:#555">'+f(ag)+'</td>';
+    tb.appendChild(tr);
+  });
+}
+
+function toggleActor(id,checked){
+  if(checked&&T.actors.length>=4){alert('Max 4 non-resident actors.');buildActors();return;}
+  if(checked)T.actors.push(id);
+  else T.actors=T.actors.filter(function(x){return x!==id;});
+  buildActors();recalc();
+}
+
+function recalc(){
+  var dir=g('director'),ep1=g('ep1');
+  var ep2=T.ep2?g('ep2_amt'):0,ap=T.ap?g('ap_amt'):0;
+  var cast=0;T.actors.forEach(function(id){var a=ACTORS.filter(function(x){return x.id===id;})[0];if(a)cast+=a.wages;});
+  var km=(T.klo?g('klo'):0)+(T.ksag?g('ksag'):0)+(T.mlo?g('mlo'):0)+(T.msag?g('msag'):0);
+  var prodacc=T.prodacc?g('prodacc_amt'):0;
+  var btlLo=g('btl_lo'),btlLcl=g('btl_local');
+  var labBase=dir+ep1+ep2+ap+cast+km+prodacc+btlLo+btlLcl;
+
+  // Spend — sum all keys
+  var spBase=0;
+  SPKEYS.forEach(function(k){spBase+=g(k);});
+  // locfees is replaced by individual locs — we don't double count. locfees was the aggregate.
+  // We removed locfees from SPKEYS and replaced with individual locs above.
+
+  var alBase=(T.ld?g('ld_amt'):0)+(T.box?g('box_amt'):0)+(T.car?g('car_amt'):0)+(T.mk?g('mk_amt'):0);
+  var camBase=(T.hs?g('hs_amt'):0)+(T.acam?g('acam_amt'):0);
+  var totalBase=labBase+spBase+alBase+camBase;
+  var baseCredit=totalBase*0.30;
+
+  // EDA uplift
+  var paBase=g('kepa')+g('setpa')+g('offpa')+g('artpa');
+  var extBase=g('extras')*(T.upct/100);
+  var upBase=paBase+extBase;
+  var upCredit=upBase*0.15;
+  var totalCredit=baseCredit+upCredit;
+
+  // Banner
+  s('b-base',f(totalBase));s('b-credit',f(baseCredit));
+  s('b-uplift',f(upCredit));s('b-total',f(totalCredit));
+  s('b-rate',(totalCredit/g('budget')*100).toFixed(1)+'%');
+
+  // GT Labor
+  s('c-director',f(dir*0.3));s('c-ep1',f(ep1*0.3));
+  s('v-ep2',T.ep2?f(ep2):'$0 (off)');s('c-ep2',T.ep2?f(ep2*0.3):'—');
+  s('v-ap',T.ap?f(ap):'$0 (off)');s('c-ap',T.ap?f(ap*0.3):'—');
+  s('v-cast',f(cast));s('c-cast',f(cast*0.3));
+  s('v-km',f(km));s('c-km',f(km*0.3));
+  s('c-btllo',f(btlLo*0.3));s('c-btllocal',f(btlLcl*0.3));
+  s('v-labbase',f(labBase));s('c-labbase',f(labBase*0.3));
+  s('gt-lab-hdr',f(labBase));s('s-lab',f(labBase*0.3));
+
+  // GT Spend
+  SPKEYS.forEach(function(k){var c=document.getElementById('c-'+k);if(c)c.textContent=f(g(k)*0.3);});
+  s('v-spbase',f(spBase));s('c-spbase',f(spBase*0.3));
+  s('gt-sp-hdr',f(spBase));s('s-sp',f(spBase*0.3));
+
+  // GT Allow
+  s('v-ld',T.ld?f(g('ld_amt')):'$0');s('c-ld',T.ld?f(g('ld_amt')*0.3):'—');
+  s('v-box',T.box?f(g('box_amt')):'$0');s('c-box',T.box?f(g('box_amt')*0.3):'—');
+  s('v-car',T.car?f(g('car_amt')):'$0');s('c-car',T.car?f(g('car_amt')*0.3):'—');
+  s('v-mk',T.mk?f(g('mk_amt')):'$0');s('c-mk',T.mk?f(g('mk_amt')*0.3):'—');
+  s('v-albase',f(alBase));s('c-albase',f(alBase*0.3));
+  s('gt-al-hdr',f(alBase));
+
+  // Allowances tab
+  s('al-ld-c',T.ld?f(g('ld_amt')*0.3):'—');
+  s('al-box-c',T.box?f(g('box_amt')*0.3):'—');
+  s('al-car-c',T.car?f(g('car_amt')*0.3):'—');
+  s('al-mk-c',T.mk?f(g('mk_amt')*0.3):'—');
+  s('al-base',f(alBase));s('al-credit',f(alBase*0.3));
+
+  // Cam
+  s('v-hs',T.hs?f(g('hs_amt')):'$0');s('c-hs',T.hs?f(g('hs_amt')*0.3):'—');
+  s('v-acam',T.acam?f(g('acam_amt')):'$0');s('c-acam',T.acam?f(g('acam_amt')*0.3):'—');
+  s('gt-cam-hdr',(T.hs||T.acam)?f(camBase):'$0');
+
+  // Uplift
+  s('v-extb',f(extBase));s('v-extc',f(extBase*0.15));
+  s('v-upbase',f(upBase));s('v-upcredit',f(upCredit));
+  s('gt-up-hdr',f(upCredit));s('s-up',f(upCredit));s('s-tot',f(totalCredit));
+
+  // Labor tab
+  s('lv-ep2',T.ep2?f(ep2):'$0 (off)');s('lv-ap',T.ap?f(ap):'$0 (off)');
+  s('cast-total',f(cast));s('cast-credit',f(cast*0.3));
+  var w=document.getElementById('actor-warn');
+  if(w)w.textContent=T.actors.length===4?'Max 4 selected.':(T.actors.length+'/4 selected.');
+  s('lv-exwages',f(g('extras')));
+  s('lv-exppct',Math.round(T.upct)+'%');
+  s('lv-exbase',f(extBase));s('lv-excredit',f(extBase*0.15));
+  s('lv-upbase',f(upBase));s('lv-upcredit',f(upCredit));
+
+  // Labor tab — per-line credit cells and dept totals
+  // ATL
+  s('lc-director',f(dir*0.3));s('lc-ep1',f(ep1*0.3));
+  s('lc-ep2',T.ep2?f(ep2*0.3):'—');s('lc-ap',T.ap?f(ap*0.3):'—');
+  var atlW=dir+ep1+ep2+ap;s('ldt-atl-w',f(atlW));s('ldt-atl',f(atlW*0.3));
+  // K+M
+  s('lc-klo',T.klo?f(g('klo')*0.3):'—');s('lc-ksag',T.ksag?f(g('ksag')*0.3):'—');
+  s('lc-mlo',T.mlo?f(g('mlo')*0.3):'—');s('lc-msag',T.msag?f(g('msag')*0.3):'—');
+  s('ldt-km-w',f(km));s('ldt-km',f(km*0.3));
+  // 2000 — Iowa PAs excluded
+  var ks2000=['ad1','ad2','ad22','scriptsup','locmgr','alocmgr','prodco','scriptclr','aprodco','kepa','setpa','offpa','aprodacc','acclerk'];
+  ks2000.forEach(function(k){s('lc-'+k,f(g(k)*0.3));});
+  s('lc-prodacc',T.prodacc?f(g('prodacc_amt')*0.3):'—');
+  var w2000=ks2000.reduce(function(a,k){return a+g(k);},0)+prodacc;
+  s('ldt-2000-w',f(w2000));s('ldt-2000',f(w2000*0.3));
+  // 2200
+  var ks2200=['proddsgn','artdir','artpa','graphdsgn'];
+  ks2200.forEach(function(k){s('lc-'+k,f(g(k)*0.3));});
+  var w2200=ks2200.reduce(function(a,k){return a+g(k);},0);
+  s('ldt-2200-w',f(w2200));s('ldt-2200',f(w2200*0.3));
+  // 2500 — LA/Iowa excluded
+  var ks2500=['kgrip','bbgrip','cogrip','dollygrip','xgripil','xrigil','kcs','xcs'];
+  ks2500.forEach(function(k){s('lc-'+k,f(g(k)*0.3));});
+  var w2500=ks2500.reduce(function(a,k){return a+g(k);},0);
+  s('ldt-2500-w',f(w2500));s('ldt-2500',f(w2500*0.3));
+  // 2600
+  var ks2600=['spfxsup','spfx1'];
+  ks2600.forEach(function(k){s('lc-'+k,f(g(k)*0.3));});
+  var w2600=ks2600.reduce(function(a,k){return a+g(k);},0);
+  s('ldt-2600-w',f(w2600));s('ldt-2600',f(w2600*0.3));
+  // 2700
+  var ks2700=['setdec','leadman','swing','dressers'];
+  ks2700.forEach(function(k){s('lc-'+k,f(g(k)*0.3));});
+  var w2700=ks2700.reduce(function(a,k){return a+g(k);},0);
+  s('ldt-2700-w',f(w2700));s('ldt-2700',f(w2700*0.3));
+  // 2800
+  s('lc-propmaster',f(g('propmaster')*0.3));
+  s('ldt-2800-w',f(g('propmaster')));s('ldt-2800',f(g('propmaster')*0.3));
+  // 2900
+  var ks2900=['costdsgn','keywd','cost1','xcost'];
+  ks2900.forEach(function(k){s('lc-'+k,f(g(k)*0.3));});
+  var w2900=ks2900.reduce(function(a,k){return a+g(k);},0);
+  s('ldt-2900-w',f(w2900));s('ldt-2900',f(w2900*0.3));
+  // 3100
+  var ks3100=['kmua','mua','xmua','khair','hair','xhair'];
+  ks3100.forEach(function(k){s('lc-'+k,f(g(k)*0.3));});
+  var w3100=ks3100.reduce(function(a,k){return a+g(k);},0);
+  s('ldt-3100-w',f(w3100));s('ldt-3100',f(w3100*0.3));
+  // 3000
+  var ks3000=['carcoo','carmech'];
+  ks3000.forEach(function(k){s('lc-'+k,f(g(k)*0.3));});
+  var w3000=ks3000.reduce(function(a,k){return a+g(k);},0);
+  s('ldt-3000-w',f(w3000));s('ldt-3000',f(w3000*0.3));
+  // 3200
+  var ks3200=['gaffer','bbe','elec1','xelec'];
+  ks3200.forEach(function(k){s('lc-'+k,f(g(k)*0.3));});
+  var w3200=ks3200.reduce(function(a,k){return a+g(k);},0);
+  s('ldt-3200-w',f(w3200));s('ldt-3200',f(w3200*0.3));
+  // 3300 — DP counts (NR Key), steadicam/ac1/drone/hs excluded (LA)
+  s('lc-dp',f(g('dp')*0.3));
+  var ks3300il=['ac2','camload','rico','stillphoto','vtr'];
+  ks3300il.forEach(function(k){s('lc-'+k,f(g(k)*0.3));});
+  s('lc-acam',T.acam?f(g('acam_amt')*0.3):'—');
+  var w3300=g('dp')+ks3300il.reduce(function(a,k){return a+g(k);},0)+(T.acam?g('acam_amt'):0);
+  s('ldt-3300-w',f(w3300));s('ldt-3300',f(w3300*0.3));
+  // 3400
+  var ks3400=['sndmix','boomop'];
+  ks3400.forEach(function(k){s('lc-'+k,f(g(k)*0.3));});
+  var w3400=ks3400.reduce(function(a,k){return a+g(k);},0);
+  s('ldt-3400-w',f(w3400));s('ldt-3400',f(w3400*0.3));
+  // 3500 — Iowa driver excluded
+  var ks3500=['transcoo','transcap','vandrvil','xdrvrs'];
+  ks3500.forEach(function(k){s('lc-'+k,f(g(k)*0.3));});
+  var w3500=ks3500.reduce(function(a,k){return a+g(k);},0);
+  s('ldt-3500-w',f(w3500));s('ldt-3500',f(w3500*0.3));
+  // 3600
+  var ks3600=['chef','catast'];
+  ks3600.forEach(function(k){s('lc-'+k,f(g(k)*0.3));});
+  var w3600=ks3600.reduce(function(a,k){return a+g(k);},0);
+  s('ldt-3600-w',f(w3600));s('ldt-3600',f(w3600*0.3));
+  // 2100 extras
+  s('lc-extras',f(g('extras')*0.3));
+
+  // GT EDA table — base display + per-row credits (PAs are always 100%)
+  s('v-kepa-b',f(g('kepa')));s('c-kepa-up',f(g('kepa')*0.15));
+  s('v-setpa-b',f(g('setpa')));s('c-setpa-up',f(g('setpa')*0.15));
+  s('v-offpa-b',f(g('offpa')));s('c-offpa-up',f(g('offpa')*0.15));
+  s('v-artpa-b',f(g('artpa')));s('c-artpa-up',f(g('artpa')*0.15));
+  // Labor tab EDA summary table (static-looking rows that now update)
+  s('lv-kepa-w',f(g('kepa')));s('lv-kepa-b',f(g('kepa')));s('lv-kepa-c',f(g('kepa')*0.15));
+  s('lv-setpa-w',f(g('setpa')));s('lv-setpa-b',f(g('setpa')));s('lv-setpa-c',f(g('setpa')*0.15));
+  s('lv-offpa-w',f(g('offpa')));s('lv-offpa-b',f(g('offpa')));s('lv-offpa-c',f(g('offpa')*0.15));
+  s('lv-artpa-w',f(g('artpa')));s('lv-artpa-b',f(g('artpa')));s('lv-artpa-c',f(g('artpa')*0.15));
+
+  // GT spend section — locfees credit (aggregate of individual locs)
+  var locFeeTotal=['loc01','loc02','loc03','loc04','loc05','loc06','loc07','loc08',
+    'loc12','loc13','loc16','loc17','loc18','loc20','loc21'].reduce(function(a,k){return a+g(k);},0);
+  s('c-locfees',f(locFeeTotal*0.3));
+  // Keep e-locfees display in sync with individual locs sum
+  var eLocEl=document.getElementById('e-locfees');if(eLocEl&&!T.OV.locfees)eLocEl.textContent=f(locFeeTotal);
+
+  // Spend tab
+  SPKEYS.forEach(function(k){
+    // custom rows use an inner span to preserve the delete button
+    var cv=document.getElementById('sc-'+k+'-v');
+    if(cv){cv.textContent=f(g(k)*0.3);return;}
+    var c=document.getElementById('sc-'+k);if(c)c.textContent=f(g(k)*0.3);
+  });
+  s('sp-total',f(spBase));s('sc-total',f(spBase*0.3));
+
+  // Iowa
+  var ia=g('iowa_hotel')+g('iowa_pd')+g('iapas')+g('iowa_site')+g('vandrvia')+g('xgripia')+g('xrigia');
+  s('ia-total',f(ia));
+
+  // Caps
+  s('cap-ep2',T.ep2?'$40,000 (on)':'$0 (off)');
+  s('cap-prodacc',T.prodacc?'$31,500 (on)':'$0 (off)');
+  var cd=document.getElementById('caps-cast');
+  if(cd){
+    var h='<table style="margin:0;width:100%"><tr><th>Character</th><th>Actor</th><th class="R">Wages (in credit)</th><th class="R">Agency (excl.)</th></tr>';
+    T.actors.forEach(function(id){var a=ACTORS.filter(function(x){return x.id===id;})[0];if(a){h+='<tr><td>'+a.name+'</td><td style="color:#777">'+a.real+'</td><td class="R cl">'+f(a.wages)+'</td><td class="R" style="color:#555">'+f(Math.round(a.wages*0.1))+'</td></tr>';}});
+    h+='<tr style="background:#1a1a35"><td colspan="2"></td><td class="R B cl">'+f(cast)+'</td><td></td></tr></table>';
+    cd.innerHTML=h;
+  }
+}
+
+function switchTab(id,btn){
+  document.querySelectorAll('.content').forEach(function(c){c.classList.remove('active');});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleSec(hdr,bodyId){
+  var b=document.getElementById(bodyId);
+  b.classList.toggle('hide');
+  hdr.classList.toggle('open');
+}
+
+// Lock / edit
+var lockEl=document.getElementById('lock');
+var editOn=false;
+lockEl.addEventListener('click',function(){
+  editOn=!editOn;
+  document.body.classList.toggle('editmode',editOn);
+  lockEl.textContent=editOn?'🔓':'🔒';
+  lockEl.classList.toggle('on',editOn);
+  lockEl.title=editOn?'Click any green value to edit':'Click to unlock editing';
+});
+
+document.addEventListener('click',function(e){
+  if(!editOn)return;
+  var el=e.target;
+  if(!el.classList.contains('editable'))return;
+  var k=el.dataset.k;
+  if(!k)return;
+  var cur=T.OV[k]!==undefined?T.OV[k]:D[k];
+  var raw=prompt('Edit value (key: '+k+')\nCurrent: '+f(cur),cur);
+  if(raw===null)return;
+  var n=parseFloat(raw.replace(/[$,\s]/g,''));
+  if(isNaN(n)){alert('Enter a number.');return;}
+  T.OV[k]=n;
+  el.textContent=f(n);
+  // Sync mirror elements with same data-k
+  document.querySelectorAll('[data-k="'+k+'"]').forEach(function(m){m.textContent=f(n);});
+  recalc();
+});
+
+buildActors();
+recalc();
+</script>
+</body>
+</html>
